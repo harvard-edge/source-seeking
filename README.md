@@ -1,14 +1,18 @@
 # Source Seeking on a Nano drone
 In this repository, we include all code necessary for inference of a full 8-bit quantized DQN policy on a BitCraze CrazyFlie. We have used this pipeline to perform light seeking on a 31-gram nano drone (CrazyFlie).
-
+This repository consists of the following two parts:
   - Conversion: the python code for conversion from a Tensorflow checkpoint (.cktp)
   - crazyflie-firmware: the crazyflie firmware enabling inference
+  
+  
+![Air Learning](readme_fig/pipeline_ss.png)
+
 
 # The Project
 
 **Title**: Learning to Seek: Autonomous Source Seeking with Deep Reinforcement Learning Onboard a Nano Drone Microcontroller
 
-**Authors**: Bardienus P. Duisterhof, Srivatsan Krishnan, Jonathan J. Cruz, Colby R. Banbury, William Fu$, Aleksandra Faust, Guido C. H. E. de Croon, Vijay Janapa Reddi
+**Authors**: Bardienus P. Duisterhof, Srivatsan Krishnan, Jonathan J. Cruz, Colby R. Banbury, William Fu, Aleksandra Faust, Guido C. H. E. de Croon, Vijay Janapa Reddi
 
 **Abstract**:
 
