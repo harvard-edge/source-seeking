@@ -10,6 +10,7 @@ This repository consists of the following two parts:
 
 # The Project
 
+**Paper**: https://arxiv.org/abs/1909.11236
 **Title**: Learning to Seek: Autonomous Source Seeking with Deep Reinforcement Learning Onboard a Nano Drone Microcontroller
 
 **Authors**: Bardienus P. Duisterhof, Srivatsan Krishnan, Jonathan J. Cruz, Colby R. Banbury, William Fu, Aleksandra Faust, Guido C. H. E. de Croon, Vijay Janapa Reddi
