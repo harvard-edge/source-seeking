@@ -88,4 +88,4 @@ Bardienus Duisterhof (bduisterhof@g.harvard.edu)
 
 Srivatsan Krishnan (srivatsan@seas.harvard.edu)
 
-William Fu 
+William Fu (wfu@college.harvard.edu)
