@@ -1,0 +1,10 @@
+# Tensorflow dumps
+*.tflite
+*.pb
+*.ckpt*
+
+# Python
+*.pyc
+
+# Mac OSX
+*.DS_Store*
