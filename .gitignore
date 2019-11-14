@@ -2,6 +2,7 @@
 *.tflite
 *.pb
 *.ckpt*
+models
 
 # Python
 *.pyc

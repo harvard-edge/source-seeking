@@ -6,13 +6,14 @@ Used for inference of Deep Reinforcement Learning on a nano drone
 
 Contact: bduisterhof@g.harvard.edu
 '''
-
 ## -- required libraries, tested with tf 1.13.1 -- ##
 import tensorflow as tf 
 from tensorflow.python.platform import gfile
 import numpy as np 
 import matplotlib.pyplot as plt
+import argparse
 from settings import *
+
 
 ## -- this reads a .ckpt and freezes the graph to a .pb -- ##
 def freeze_graph():
@@ -22,6 +23,15 @@ def freeze_graph():
         frozen_graph_def = tf.graph_util.convert_variables_to_constants(sess, sess.graph_def, output_node_names) 
         with open(frozen_graph_path, 'wb') as f:
             f.write(frozen_graph_def.SerializeToString())
+
+def freeze_graph_by_name(meta_file, ckpt_file, frozen_graph_file):
+    with tf.Session() as sess:
+        saver = tf.train.import_meta_graph(meta_file)
+        saver.restore(sess, ckpt_file)
+        frozen_graph_def = tf.graph_util.convert_variables_to_constants(sess, sess.graph_def, output_node_names) 
+        with open(frozen_graph_file, 'wb') as f:
+            f.write(frozen_graph_def.SerializeToString())
+
 
 ## -- this shows all operations in a graph in .pb format -- ##
 def show_graph():
@@ -39,6 +49,7 @@ def show_graph():
     for op in sess.graph.get_operations():
         print(op.name)
     return(sess.graph.get_operations)
+
 
 ## -- converts a frozen graph to .tflite -- ##
 def convert_tflite(t_min,t_max):
@@ -128,7 +139,15 @@ def find_min_max(layers,num_it):
 
 ## -- main loop, finds the min-max range in 1,000 iterations and converts to .tflite -- ##
 if __name__ == "__main__":    
-    freeze_graph()
-    show_graph()
-    t_min, t_max = find_min_max(arrs,min_max_num_it)
-    convert_tflite(t_min,t_max)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model', help='path to checkpoint model meta', required=True)
+    parser.add_argument('--ckpt', help='path to checkpoint model ckpt', required=True)
+    parser.add_argument('--output', default='frozen_model.pb', help='directory to checkpoint models')
+    args = parser.parse_args()
+
+    freeze_graph_by_name(args.model, args.ckpt, args.output)
+
+    # freeze_graph()
+    # show_graph()
+    # t_min, t_max = find_min_max(arrs,min_max_num_it)
+    # convert_tflite(t_min,t_max)
