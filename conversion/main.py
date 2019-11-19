@@ -52,7 +52,7 @@ def show_graph():
 
 
 ## -- converts a frozen graph to .tflite -- ##
-def convert_tflite(t_min,t_max):
+def convert_tflite(t_min, t_max):
     saved_model_dir = frozen_graph_path
     output_arrays = output_node_names
 
@@ -65,6 +65,22 @@ def convert_tflite(t_min,t_max):
 
     tflite_model = converter.convert()
     open("converted_lite.tflite","wb").write(tflite_model)
+
+
+def convert_tflite_no_quantization(frozen_model_path, input_nodes, output_nodes):
+    """Converts a frozen graph to a tflite model without using quantization.
+    Model will remain with float32 weights."""
+    input_arrays = ['deepq/input/Ob']                                           
+    
+    converter = tf.lite.TFLiteConverter.from_frozen_graph(
+        frozen_model_path, input_nodes, output_nodes)
+    tflite_model = converter.convert()
+
+    with open("converted_lite.tflite","wb") as f:
+        f.write(tflite_model)
+
+
+
 
 ## -- function that runs representative input through a specific layer -- ##
 def run_pb(output_node):
@@ -143,11 +159,14 @@ if __name__ == "__main__":
     parser.add_argument('--model', help='path to checkpoint model meta', required=True)
     parser.add_argument('--ckpt', help='path to checkpoint model ckpt', required=True)
     parser.add_argument('--output', default='frozen_model.pb', help='directory to checkpoint models')
+    parser.add_argument('--input-nodes', default='deepq/input/Ob', help='input node name')
+    parser.add_argument('--output-nodes', default='deepq/model/action_value/fully_connected_2/BiasAdd', help='input node name')
     args = parser.parse_args()
 
     freeze_graph_by_name(args.model, args.ckpt, args.output)
+    convert_tflite_no_quantization(args.output, [args.input_nodes], [args.output_nodes])
 
     # freeze_graph()
     # show_graph()
-    # t_min, t_max = find_min_max(arrs,min_max_num_it)
+    # t_min, t_max = find_min_max(arrs, min_max_num_it)
     # convert_tflite(t_min,t_max)
