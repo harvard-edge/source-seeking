@@ -23,8 +23,8 @@ input_arrays = ['deepq/input/Ob']
 input_node = 'deepq/input/Ob:0'                                             
 meta_path ='models/0.ckpt.meta'                                                    
 checkpoint = 'models/0.ckpt'                                                       
-frozen_graph_path = 'models/frozen_graph.pb'
+frozen_graph_path = 'models/frozen_model.pb'
 arrs = ['deepq/model/action_value/fully_connected/BiasAdd:0','deepq/model/action_value/fully_connected_1/BiasAdd:0','deepq/model/action_value/fully_connected_2/BiasAdd:0' \
 ,'deepq/model/action_value/fully_connected/MatMul:0','deepq/model/action_value/fully_connected_1/MatMul:0','deepq/model/action_value/fully_connected_2/MatMul:0','deepq/model/action_value/Relu:0','deepq/model/action_value/Relu_1:0']
 plot_min_max = False
-min_max_num_it = 1000
+min_max_num_it = 100

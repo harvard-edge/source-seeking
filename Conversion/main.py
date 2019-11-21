@@ -46,11 +46,11 @@ def convert_tflite(t_min,t_max):
     output_arrays = output_node_names
 
     converter = tf.lite.TFLiteConverter.from_frozen_graph(saved_model_dir,input_arrays,output_arrays)   # load protbuf and pass input and output array names
-    converter.inference_type = tf.uint8 # def uint8_t quant
+    converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
 
-    ## quantization params
-    converter.quantized_input_stats = {input_arrays[0] : (0, 51)}  # mean, std_dev --> in this case our float range is [0,5] and int8 range [0,255]
-    converter.default_ranges_stats = (t_min,t_max)   # range of data flow
+    # ## quantization params
+    # converter.quantized_input_stats = {input_arrays[0] : (0, 51)}  # mean, std_dev --> in this case our float range is [0,5] and int8 range [0,255]
+    # converter.default_ranges_stats = (t_min,t_max)   # range of data flow
 
     tflite_model = converter.convert()
     open("converted_lite.tflite","wb").write(tflite_model)
@@ -71,7 +71,7 @@ def run_pb(output_node):
 
     with sess.as_default():
         prob_tensor = sess.graph.get_tensor_by_name(output_layer)
-        a = np.random.uniform(0, 5, (1, 20)) # input in network
+        a = np.array([0.599,0.325999,0.08,0.32,0.74,0.74]).reshape((1,6))
         predictions, = sess.run(prob_tensor, {input_node:  a   })
  
     return(predictions)
@@ -88,7 +88,8 @@ def inference_tflite():
 
     # Test model on random input data in 8-bit range
     input_shape = input_details[0]['shape']
-    input_data = np.random.randint(0, 255, (1, 20),dtype=np.uint8)
+    #input_data = np.random.randint(0, 255, (1, 20),dtype=np.uint8)
+    input_data = np.array(np.random.uniform(low=0.5, high=13.3, size=(1,20)),dtype="float32")
 
     interpreter.set_tensor(input_details[0]['index'], input_data)
     interpreter.invoke()
@@ -129,6 +130,9 @@ def find_min_max(layers,num_it):
 ## -- main loop, finds the min-max range in 1,000 iterations and converts to .tflite -- ##
 if __name__ == "__main__":    
     freeze_graph()
-    show_graph()
-    t_min, t_max = find_min_max(arrs,min_max_num_it)
-    convert_tflite(t_min,t_max)
+    # show_graph()
+    # t_min, t_max = find_min_max(arrs,min_max_num_it)
+    # convert_tflite(0,1)
+    # print(run_pb('deepq/model/action_value/fully_connected_2/BiasAdd:0'))
+    # print(inference_tflite())
+
